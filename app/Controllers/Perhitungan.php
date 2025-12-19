@@ -14,19 +14,6 @@ class Perhitungan extends MY_Controller {
         $this->model = $this->Perhitungan_model;
         $this->table = "normalisasi";
         $this->pkField = "id_normalisasi";
-        $this->kode = "id_normalisasi";
-
-        $this->fields = array(
-            "nama_alternatif" => array("TIPE" => "STRING", "LABEL" => "Alternatif"),
-            "nama_kriteria" => array("TIPE" => "STRING", "LABEL" => "Kriteria"),
-            "nilai_normalisasi" => array("TIPE" => "STRING", "LABEL" => "Normalisasi"),
-            "status_name" => array("TIPE" => "STRING", "LABEL" => "Status"),
-            "created" => array("TIPE" => "STRING", "LABEL" => "Created User"),
-            "created_date" => array("TIPE" => "DATETIME", "LABEL" => "Created Date"),
-            "modified" => array("TIPE" => "STRING", "LABEL" => "Modified User"),
-            "modified_date" => array("TIPE" => "DATETIME", "LABEL" => "Modified Date"),
-            "action" => array("TIPE" => "TRANSACTION", "LABEL" => "Action"),
-        );
     }
 
     public function index() {
@@ -40,33 +27,104 @@ class Perhitungan extends MY_Controller {
         }
     }
 
-    public function dataInput() {
-        $this->form_validation->setRule('id_alternatif', 'Alternative', 'required');
-        $this->form_validation->setRule('id_kriteria', 'Kriteria', 'required');
-        $this->form_validation->setRule('nilai_normalisasi', 'Normalized Value', 'required|numeric|greater_than_equal_to[0]|less_than_equal_to[1]');
+    /**
+     * Get Statistik untuk dashboard
+     */
+    public function get_statistik() {
+        $db = \Config\Database::connect();
 
-        if ($this->form_validation->withRequest($this->request)->run() == FALSE) {
-            return array("valid" => FALSE, "error" =>  $this->form_validation->listErrors());
-        } else {
-            $data = array();
-            foreach ($this->request->getPost() as $key => $value) {
-                if ($key == "method") {
+        $total_alternatif = $db->table('alternatif')
+            ->where('status', 1)
+            ->countAllResults();
 
-                } elseif ($key == $this->pkField) {
-//                    $data[$key] = !$value ? $this->uuid->v4() : $value;
-                    $this->pkFieldValue = !$value ? $this->uuid->v4() : $value;
-                    $data[$key] = $this->pkFieldValue;
-                } elseif ($key == $this->kode) {
-                    $this->kode = $value;
-                    $data[$key] = $value;
-                } else {
-                    if (isset($value)) {
-                        $data[$key] = $value;
-                    }
-                }
-            }
+        $total_kriteria = $db->table('kriteria')
+            ->where('status', 1)
+            ->countAllResults();
+
+        $total_normalisasi = $db->table('normalisasi')
+            ->countAllResults();
+
+        echo json_encode([
+            'total_alternatif' => $total_alternatif,
+            'total_kriteria' => $total_kriteria,
+            'total_normalisasi' => $total_normalisasi
+        ]);
+    }
+
+    /**
+     * Get Data Normalisasi dalam bentuk Tabel 4 Jurnal
+     */
+    public function get_normalisasi() {
+        $db = \Config\Database::connect();
+
+        $query = "
+            SELECT
+                a.id_alternatif,
+                a.nama_alternatif,
+                k.id_kriteria,
+                k.nama_kriteria,
+                n.nilai_normalisasi
+            FROM normalisasi n
+            JOIN alternatif a ON n.id_alternatif = a.id_alternatif
+            JOIN kriteria k ON n.id_kriteria = k.id_kriteria
+            WHERE n.status = 1 AND a.status = 1 AND k.status = 1
+            ORDER BY a.nama_alternatif, k.nama_kriteria
+        ";
+
+        $result = $db->query($query)->getResultArray();
+        echo json_encode($result);
+    }
+
+    /**
+     * FUNGSI UTAMA: Calculate Normalisasi (Auto)
+     */
+    public function calculate() {
+        $db = \Config\Database::connect();
+
+        try {
+            // 1. Hapus data normalisasi lama
+            $db->table('normalisasi')->truncate();
+
+            // 2. Hitung Normalisasi dengan Query
+            $query = "
+                INSERT INTO normalisasi (id_normalisasi, id_alternatif, id_kriteria, nilai_normalisasi, created_date, modified_date)
+                SELECT
+                    UUID() as id_normalisasi,
+                    n.id_alternatif,
+                    n.id_kriteria,
+                    CASE
+                        WHEN k.atribut = 'benefit' THEN
+                            n.nilai / (SELECT MAX(nilai) FROM nilai WHERE id_kriteria = n.id_kriteria AND status = 1)
+                        WHEN k.atribut = 'cost' THEN
+                            (SELECT MIN(nilai) FROM nilai WHERE id_kriteria = n.id_kriteria AND status = 1) / n.nilai
+                        ELSE 0
+                    END as nilai_normalisasi,
+                    NOW() as created_date,
+                    NOW() as modified_date
+                FROM
+                    nilai n
+                INNER JOIN
+                    kriteria k ON n.id_kriteria = k.id_kriteria
+                WHERE
+                    n.status = 1 AND k.status = 1
+            ";
+
+            $db->query($query);
+
+            // 3. Hitung total data
+            $total = $db->table('normalisasi')->countAllResults();
+
+            echo json_encode([
+                'success' => true,
+                'message' => 'Normalisasi berhasil dihitung',
+                'total' => $total
+            ]);
+
+        } catch (\Exception $e) {
+            echo json_encode([
+                'success' => false,
+                'message' => 'Error: ' . $e->getMessage()
+            ]);
         }
-
-        return array("valid" => TRUE, "data" => $data);
     }
 }

@@ -82,7 +82,7 @@
                                 <div class="row">
                                     <div class="col-md-4"><label for="nilai" class="control-label">Nilai <span class="text-danger">*</span></label></div>
                                     <div class="col-md-8">
-                                        <input type="number" id="nilai" name="nilai" class="form-control" placeholder="Masukkan nilai" step="0.01" />
+                                        <input type="number" id="nilai" name="nilai" class="form-control" placeholder="Masukkan nilai" step="0.01" min="1" max="5" />
                                         <small class="form-text text-muted">Nilai skala 1-5 atau sesuai dengan satuan kriteria</small>
                                     </div>
                                 </div>
