@@ -1,16 +1,16 @@
 <?php
 
 namespace App\Controllers\Setting;
- 
+
 use App\Controllers\MY_Controller;
 use App\Models\User_model;
- 
+
 class User extends MY_Controller {
 
     function __construct() {
         parent::__construct();
         $this->User_model = new User_model();
-        
+
         $this->model = $this->User_model;
         $this->table = "user";
         $this->pkField = "id_user";
@@ -22,8 +22,7 @@ class User extends MY_Controller {
         $this->fields = array(
             "name" => array("TIPE" => "STRING", "LABEL" => "Name"),
             "username" => array("TIPE" => "STRING", "LABEL" => "Username"),
-            "group_name" => array("TIPE" => "STRING", "LABEL" => "Group Name"),            
-            "cabang" => array("TIPE" => "STRING", "LABEL" => "Cabang"),
+            "group_name" => array("TIPE" => "STRING", "LABEL" => "Group Name"),
             "status_dok" => array("TIPE" => "STRING", "LABEL" => "Status"),
             "created" => array("TIPE" => "STRING", "LABEL" => "Created User"),
             "created_date" => array("TIPE" => "DATETIME", "LABEL" => "Created Date"),
@@ -33,10 +32,10 @@ class User extends MY_Controller {
         );
         //$this->kondisi = array("username"=>$this->request->getPost("username"),
         //    "password"=>md5($this->request->getPost("password")));
-        
+
         //$this->model->fieldsView = $this->fields;
     }
-    
+
     public function index() {
         if (!$this->session->get('website_admin_logged_in')) {
             return redirect()->to(base_url().'login');
@@ -44,10 +43,10 @@ class User extends MY_Controller {
         if($this->lihat!=1){
             return view('noaccess_view', $this->data);
         }else{
-            return view('setting/user_view', $this->data); 
+            return view('setting/user_view', $this->data);
         }
     }
-    
+
     public function dataInput() {
         // $this->load->library('form_validation');
         // $this->form_validation->set_error_delimiters('', '');
@@ -67,7 +66,7 @@ class User extends MY_Controller {
             );
             $this->session->set_userdata($sess_data);
         }
-        
+
 
         if ($this->form_validation->withRequest($this->request)->run() == FALSE) {
             return array("valid" => FALSE, "error" =>  $this->form_validation->listErrors());
@@ -75,7 +74,7 @@ class User extends MY_Controller {
             $data = array();
             foreach ($this->request->getPost() as $key => $value) {
                 if ($key == "method") {
-                    
+
                 } elseif ($key == $this->pkField) {
 //                    $data[$key] = !$value ? $this->uuid->v4() : $value;
                     $this->pkFieldValue = !$value ? $this->uuid->v4() : $value;
@@ -115,7 +114,7 @@ class User extends MY_Controller {
     }
 
     public function parent_check($value) {
-        
+
         $data["m_user.id_user"] = $value;
         $result = $this->User_model->check($data);
         if (!$result) {
@@ -125,7 +124,7 @@ class User extends MY_Controller {
             return TRUE;
         }
     }
-    
+
     public function ubah_password() {
         $result = array();
         // $this->load->library('form_validation');
@@ -135,7 +134,7 @@ class User extends MY_Controller {
         $this->form_validation->setRule('password2', 'Pengulangan Password', 'required|min_length[3]|max_length[255]|xss_clean|matches[password1]');
         if ($this->form_validation->withRequest($this->request)->run() == FALSE) {
             $result = array("msg" =>  $this->form_validation->listErrors());
-        } else {       
+        } else {
             $data = array();
             $id_user = $this->request->getPost("id_user");
             $data["m_users.password"] = md5($this->request->getPost("password2"));
@@ -149,7 +148,7 @@ class User extends MY_Controller {
         echo json_encode($result);
     }
 
-       
+
 
     private function randomPassword() {
         $alphabet = "abcdefghijklmnopqrstuwxyzABCDEFGHIJKLMNOPQRSTUWXYZ0123456789";
@@ -161,7 +160,7 @@ class User extends MY_Controller {
         }
         return implode($pass);
     }
-    
+
     public function event() {
         $event = $this->User_model->event();
         foreach ($event as $value) {

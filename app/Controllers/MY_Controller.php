@@ -16,7 +16,7 @@ Use CodeIgniter\HTTP\Request;
 // $session = session();
 
 abstract class MY_Controller extends BaseController {
-    
+
     // public $testing;
     var $default;
     var $base_url;
@@ -35,23 +35,23 @@ abstract class MY_Controller extends BaseController {
     var $tambah = false;
     var $ubah = false;
     var $hapus = false;
-    
+
     protected $helpers = ['form_validation', 'url', 'General_helper', 'Excel_helper', 'Email_helper', 'Telegram_helper'];
 
     public function initController(\CodeIgniter\HTTP\RequestInterface $request, \CodeIgniter\HTTP\ResponseInterface $response, \Psr\Log\LoggerInterface $logger){
         parent::initController($request, $response, $logger);
     }
-    
+
     public function __construct() {
         // parent::__construct();
 
         helper('form');
         $this->form_validation = \Config\Services::validation();
-        
+
         $this->Authority_model = new Authority_model();
         $this->Defaults_model = new Defaults_model();
         $this->Log_activity_model = new Log_activity_model();
-        
+
         $this->router = \Config\Services::router();
         $this->request = \Config\Services::request();
         $this->session = \Config\Services::session();
@@ -76,7 +76,6 @@ abstract class MY_Controller extends BaseController {
                 'user_nama'      => $this->session->get('sess_nama'),
                 'user_menu'      => $this->session->get('sess_menu'),
                 'user_level'     => $this->session->get('sess_level'),
-                'user_companies' => $this->session->get('sess_companies'),
                 'default_content'=> base_url() . $this->default['defaultController'],
                 'user_photo'     => $this->session->get('sess_photo'),
                 'menu_string'    => $this->getListMenu(),
@@ -88,7 +87,7 @@ abstract class MY_Controller extends BaseController {
                 'hapus'         => $this->hapus,
             );
             // dd($this->base_url);
-            
+
             // if(uri_string() == 'index' && uri_string() != 'home'){
             if($this->router->methodName() == 'index' && $this->current != 'home'){
                 if($this->lihat==1){
@@ -99,7 +98,7 @@ abstract class MY_Controller extends BaseController {
             }
         }
     }
-    
+
     function getDefault($data){
         $result = array();
         foreach ($data as $dt){
@@ -107,19 +106,19 @@ abstract class MY_Controller extends BaseController {
         }
         return $result;
     }
-    
+
 
     // ---------- CREAT MENU ----------------------------
     public function getListMenu(){
         $kondisi = array("authority.id_group"=>$this->session->get('user_group'),"authority.status"=>"1");
-        $dt = $this->Authority_model->get(NULL,$kondisi); 
+        $dt = $this->Authority_model->get(NULL,$kondisi);
         $this->menu_string='<ul class="nav flex-column">';
         $listMenu = $this->buildTree($dt);
         $this->createMenu($listMenu);
         $this->menu_string .= '</ul>';
         return $this->menu_string;
-        
-    }   
+
+    }
     public function buildTree(array &$elements, $parentId = '', $depth = 0) {
         if($depth > 1000) return '';
         $branch = array();
@@ -132,7 +131,7 @@ abstract class MY_Controller extends BaseController {
                 }
                 $branch[$element['id_menu']] = $element;
                 unset($elements[$element['id_menu']]);
-                              
+
             }
         }
         return $branch;
@@ -155,7 +154,7 @@ abstract class MY_Controller extends BaseController {
                                                     <ul class="nav flex-column">
                                                     ';
                     }
-                    $this->createMenu($e['children']);                
+                    $this->createMenu($e['children']);
                     $this->menu_string .= '</ul></li>';
                 }else if(isset($e['children']) && $e['parent'] != ''){
                         $this->menu_string .= '<li title="'.$e['menu_name'].'" class="nav-item">
@@ -166,9 +165,9 @@ abstract class MY_Controller extends BaseController {
                                                 </a>
                                                 <ul class="nav flex-column">
                                                     ';
-                        $this->createMenu($e['children']);              
-                        $this->menu_string .= '</ul></li>'; 
-                        
+                        $this->createMenu($e['children']);
+                        $this->menu_string .= '</ul></li>';
+
             }else{
                 if($e['icon']!=''){
                     $this->menu_string .='
@@ -183,12 +182,12 @@ abstract class MY_Controller extends BaseController {
         }
     }
 
-    
+
     // ---------- HAK AKSES ----------------------------
     public function get_hak_akses() {
         $kondisi = array("authority.id_group"=>$this->session->get('user_group'), "menu.url" => $this->current,"authority.status"=>"1");
         $this->orderBy = array("menu.sort"=>"ASC");
-        $lists = $this->Authority_model->get(NULL,$kondisi); 
+        $lists = $this->Authority_model->get(NULL,$kondisi);
         if ($lists) {
             $this->lihat = true;
             foreach ($lists as $value) {
@@ -211,7 +210,7 @@ abstract class MY_Controller extends BaseController {
         }
     }
 
- 
+
     public function ajax_list() {
         // $this->get_hak_akses();
         $filter = array();
@@ -263,7 +262,7 @@ abstract class MY_Controller extends BaseController {
                         $row[]= date($this->default['dateFront'], strtotime($list[$key]));
                     }
                 } elseif ("TIPE" == array_search("DAY", $value)) {
-                    $row[] = "<div align='left'>".indonesian_date($list[$key])."</div>"; 
+                    $row[] = "<div align='left'>".indonesian_date($list[$key])."</div>";
                 } elseif ("TIPE" == array_search("STATUS", $value)) {
                     if ($list[$key]=="1") {
                         $row[] = "<div align='center'><i class='material-icons'>done</i></div>";
@@ -327,7 +326,7 @@ abstract class MY_Controller extends BaseController {
             $result = array("msg" => "Do not have access.");
         } else {
             $result = array();
-            $data = $this->dataInput();          
+            $data = $this->dataInput();
             if ($data["valid"]) {
                 $data["data"]["created_date"] = date($this->default['dateTimeDB']);
                 $data["data"]["created_user"] = $this->session->get('sess_user_id');
@@ -339,7 +338,7 @@ abstract class MY_Controller extends BaseController {
                     if($this->kode) {
                         $result = array("success" => TRUE, "id" => $this->pkFieldValue, "kode" => $this->kode);
                     } else {
-                        $result = array("success" => TRUE, "id" => $this->pkFieldValue);                        
+                        $result = array("success" => TRUE, "id" => $this->pkFieldValue);
                     }
                     $this->cekLog('Add', json_encode($data["data"]));
                 } else {
@@ -358,7 +357,7 @@ abstract class MY_Controller extends BaseController {
             echo json_encode($data);
         }
     }
-    
+
     public function update() {
 //        $this->get_hak_akses($this->kode_transaksi);
 //        if (!$this->ubah && !$this->bypass) {
@@ -446,7 +445,7 @@ abstract class MY_Controller extends BaseController {
         $path = 'files/logs/';
         $filename = $path . $this->session->get('sess_user_id') . ".txt";
         $message = date($this->default['dateTimeDB']) . '; ' . $action . ' ; ' . $this->current . '; ' . $data . '; ';
-        
+
         if(file_exists($filename) && filesize($filename) >= $this->default['LogMaxSize']){ // 100000000 = 100 Mb
             copy($filename, $path . $this->session->get('sess_user_id') . "-" . date('YmdHis') . ".txt");
             $fp = fopen($filename, "w");
@@ -470,6 +469,6 @@ abstract class MY_Controller extends BaseController {
         $input["modul"]      = $this->current;
         $input["message"]    = $data;
         $this->Log_activity_model->add($input);
-        
+
     }
 }

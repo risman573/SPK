@@ -20,12 +20,11 @@ class Login extends BaseController {
 
     function __construct() {
         $this->session = \Config\Services::session();
-        
+
         $this->uuid = new Uuid();
         $this->User_model = new User_model();
         $this->Log_activity_model = new Log_activity_model();
         $this->User_aktif_model = new User_aktif_model();
-        
 
         $Defaults_model = new Defaults_model();
         $this->default = $this->getDefault($Defaults_model->get());
@@ -59,7 +58,7 @@ class Login extends BaseController {
         if (!$this->request->getVar('login_password')) {
             $errors['password'] = 'Password belum diisi.';
         }
-        
+
         if (!empty($errors)) {
             $data['success'] = false;
             $data['errors']  = $errors;
@@ -70,7 +69,7 @@ class Login extends BaseController {
                 foreach ($user as $row) {
                     $this->salt = "jaskd12341ierupep094cx!((#@*!&)(@(*(*)!*(*@)(!*)(!*)";
                     $password = $this->salt . $this->request->getVar('login_password');
-                    
+
                     if (md5($password) == $row['password']) {
                         $result = $this->User_model->get_child($row['id_user']);
                         if(count($result)>0){
@@ -80,7 +79,7 @@ class Login extends BaseController {
                         }else{
                             $res = array();
                         }
-                        
+
                         $cek = array(
                                     "user_aktif.id_user" => $row['id_user'],
                                     "user_aktif.status" => "0"
@@ -98,7 +97,7 @@ class Login extends BaseController {
                         $userlogin['browser']   = $_SERVER['HTTP_USER_AGENT'];
                         $userlogin['address']   = $_SERVER['REMOTE_ADDR'];
                         $this->User_aktif_model->add($userlogin);
-                        
+
                         $sess_data = array(
                             'sess_user_id' => $row['id_user'],
                             'user_group' => $row['id_group'],
@@ -106,7 +105,6 @@ class Login extends BaseController {
                             'sess_photo' => $row['photo'],
                             'sess_menu' => $row['menu'],
                             'sess_level' => $row['level'],
-                            'sess_cabang' => $row['cabang'],
                             'website_admin_logged_in' => TRUE,
                             'child' => $res
                         );
@@ -164,7 +162,7 @@ class Login extends BaseController {
                 file_put_contents($filename, "\n" . $message, FILE_APPEND);
             }
         }
-        
+
         if($this->default['logRecord'] == 2 || $this->default['logRecord'] == 3){
             $input["id"]         = $this->uuid->v4();
             $input["id_user"]    = $this->session->get('sess_user_id');

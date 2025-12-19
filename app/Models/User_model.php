@@ -8,7 +8,7 @@ class User_model extends MY_Model {
         parent::__construct();
         $this->table = "user";
         $this->primaryKey = "user.id_user";
-        $this->fields = array(            
+        $this->fields = array(
             "user.name",
             "user.username",
             "user_group.group_name",
@@ -17,7 +17,6 @@ class User_model extends MY_Model {
             "user.password",
             "user.alamat",
             "user.telp",
-            "user.cabang",
             "user.id_group",
             "user.parent",
             "user.menu",
@@ -44,18 +43,18 @@ class User_model extends MY_Model {
             "left"
             );
     }
-    
+
     public function get_child($id){
         $builder = $this->db->table($this->table);
         $builder->where("parent",$id);
         return $builder->get()->getResult();
     }
-	
+
     function getTotalUser(){
         $sql = 'SELECT COUNT(id_user) AS jumlah FROM user WHERE status<9';
         $query = $this->db->query($sql);
         $result =$query->row();
         return $result;
     }
-    
+
 }

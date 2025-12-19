@@ -4,7 +4,7 @@ if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
 class MY_Controller extends CI_Controller {
-    
+
     var $base_url;
     var $menu_string;
     var $id_menu;
@@ -20,18 +20,18 @@ class MY_Controller extends CI_Controller {
     var $tambah = false;
     var $ubah = false;
     var $hapus = false;
-    
+
     function __construct() {
         parent::__construct();
         $this->session = \Config\Services::session();
 
         $this->load->model("defaults_model");
         $this->default = $this->getDefault($this->defaults_model->get());
-        
+
         if(isset($this->default['dateTimeZone'])){
             date_default_timezone_set($this->default['dateTimeZone']);
         }
-        
+
         if (!$this->session->userdata('website_admin_logged_in')) {
             redirect('login');
         }else{
@@ -42,13 +42,11 @@ class MY_Controller extends CI_Controller {
             $this->user_nama = $this->session->userdata('sess_nama');
             $this->user_menu = $this->session->userdata('sess_menu');
             $this->user_level = $this->session->userdata('sess_level');
-            $this->user_cabang = $this->session->userdata('sess_cabang');
-            $this->user_companies = $this->session->userdata('sess_companies');
             $this->default_content = base_url() . $this->default['defaultController'];
             $this->user_photo = $this->session->userdata('sess_photo');
             $this->menu_string = $this->getListMenu();
             $this->get_hak_akses();
-            
+
             if($this->router->fetch_method() == 'index' && $this->router->fetch_class() != 'home'){
                 if($this->lihat==1){
                     $this->cekLog('Open', '');
@@ -59,7 +57,7 @@ class MY_Controller extends CI_Controller {
 //            echo $this->lihat;
         }
     }
-    
+
     function getDefault($data){
         $result = array();
         foreach ($data as $dt){
@@ -67,20 +65,20 @@ class MY_Controller extends CI_Controller {
         }
         return $result;
     }
-    
+
     public function getListMenu(){
         $this->load->model("authority_model");
         $kondisi = array("authority.id_group"=>$this->session->userdata('user_group'),"authority.status"=>"1");
-        $dt = $this->authority_model->get(NULL,$kondisi); 
+        $dt = $this->authority_model->get(NULL,$kondisi);
         $this->menu_string='<ul class="nav flex-column">';
         $listMenu = $this->buildTree($dt);
         $this->createMenu($listMenu);
         $this->menu_string .= '</ul>';
-        
+
         return $this->menu_string;
-        
-    }   
-    
+
+    }
+
     function createMenu(array &$elements){
         foreach($elements as $e){
             if($e['parent'] == '' && !isset ($e['children'])){
@@ -102,7 +100,7 @@ class MY_Controller extends CI_Controller {
                                                     <li class="nav-item">
                                                 ';
                 }
-                $this->createMenu($e['children']);                
+                $this->createMenu($e['children']);
                 $this->menu_string .= '</li></ul></li>';
             }else{
                 $this->menu_string .='
@@ -111,7 +109,7 @@ class MY_Controller extends CI_Controller {
             }
         }
     }
-    
+
     public function buildTree(array &$elements, $parentId = '', $depth = 0) {
         if($depth > 1000) return '';
         $branch = array();
@@ -124,24 +122,24 @@ class MY_Controller extends CI_Controller {
                 }
                 $branch[$element['id_menu']] = $element;
                 unset($elements[$element['id_menu']]);
-                              
+
             }
         }
         return $branch;
     }
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
     //---------  LAMA  ----------------------------------------------------------------------------
-    
+
     public function get_hak_akses() {
         $this->load->model("authority_model");
         $kondisi = array("authority.id_group"=>$this->session->userdata('user_group'), "menu.url" => $this->router->directory . $this->router->fetch_class(),"authority.status"=>"1");
         $this->orderBy = array("menu.sort"=>"ASC");
-        $lists = $this->authority_model->get(NULL,$kondisi); 
+        $lists = $this->authority_model->get(NULL,$kondisi);
 //        print_r($lists);
         if ($lists) {
             $this->lihat = true;
@@ -157,7 +155,7 @@ class MY_Controller extends CI_Controller {
             $this->hapus = false;
         }
     }
-    
+
     public function ajax_list() {
         $filter = array();
         if($this->input->post("filter")) {
@@ -200,7 +198,7 @@ class MY_Controller extends CI_Controller {
         foreach ($lists as $list) {
             $no++;
             $row = array();
-//                $this->approve = $list['approve'];                
+//                $this->approve = $list['approve'];
 
             foreach ($this->fields as $key => $value) {
                 if ($key == "action") {
@@ -224,7 +222,7 @@ class MY_Controller extends CI_Controller {
                         $row[]= date($this->default['dateFront'], strtotime($list[$key]));
                     }
                 } elseif ("TIPE" == array_search("DAY", $value)) {
-                    $row[] = "<div align='left'>".indonesian_date($list[$key])."</div>"; 
+                    $row[] = "<div align='left'>".indonesian_date($list[$key])."</div>";
                 } elseif ("TIPE" == array_search("STATUS", $value)) {
                     if ($list[$key]=="1") {
                         $row[] = "<div align='center'><i class='material-icons'>done</i></div>";
@@ -276,7 +274,7 @@ class MY_Controller extends CI_Controller {
             $result = array("msg" => "Do not have access.");
         } else {
             $result = array();
-            $data = $this->dataInput();          
+            $data = $this->dataInput();
             if ($data["valid"]) {
                 $data["data"]["created_date"] = date($this->default['dateTimeDB']);
                 $data["data"]["created_user"] = $this->session->userdata('sess_user_id');
@@ -285,7 +283,7 @@ class MY_Controller extends CI_Controller {
                     if($this->kode) {
                         $result = array("success" => TRUE, "id" => $this->pkFieldValue, "kode" => $this->kode);
                     } else {
-                        $result = array("success" => TRUE, "id" => $this->pkFieldValue);                        
+                        $result = array("success" => TRUE, "id" => $this->pkFieldValue);
                     }
                     $this->cekLog('Add', json_encode($data["data"]));
                 } else {
@@ -304,7 +302,7 @@ class MY_Controller extends CI_Controller {
             echo json_encode($data);
         }
     }
-    
+
     public function update() {
 //        $this->get_hak_akses($this->kode_transaksi);
 //        if (!$this->ubah && !$this->bypass) {
@@ -388,7 +386,7 @@ class MY_Controller extends CI_Controller {
         $path = 'files/logs/';
         $filename = $path . $this->user_id . ".txt";
         $message = date($this->default['dateTimeDB']) . '; ' . $action . ' ; ' . $this->router->fetch_class() . '; ' . $data . '; ';
-        
+
         if(file_exists($filename) && filesize($filename) >= $this->default['LogMaxSize']){ // 100000000 = 100 Mb
             copy($filename, $path . $this->user_id . "-" . date('YmdHis') . ".txt");
             $fp = fopen($filename, "w");
@@ -413,7 +411,7 @@ class MY_Controller extends CI_Controller {
         $input["message"]    = $data;
         $this->load->model("Log_activity_model");
         $this->Log_activity_model->add($input);
-        
+
     }
 
 }

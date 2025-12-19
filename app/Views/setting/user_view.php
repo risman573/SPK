@@ -12,7 +12,7 @@
                 <div class="col-auto">
                         <?php if ($tambah == "1") {?>
                         <button class="btn btn-rounded <?=$default['themeColor']?> text-white btn-icon text-uppercase pr-3" data-toggle="modal" data-target="#modal_form" onclick="tambah()">
-                            <i class="material-icons">add</i> 
+                            <i class="material-icons">add</i>
                             <span class="text-hide-xs">New</span>
                         </button>
                         <?php }?>
@@ -112,17 +112,11 @@
                                 <div class="row">
                                     <div class="col-md-4"><label class="control-label">Level</label></div>
                                     <div class="col-md-8">
-                                        <select id="level" name="level" data-placeholder="Select Level..." class="chosen_select form-control" tabindex="1" onchange="showHide()">
+                                        <select id="level" name="level" data-placeholder="Select Level..." class="chosen_select form-control" tabindex="1">
                                             <option value="0">Super Admin</option>
                                             <option value="1">Admin</option>
                                         </select>
                                     </div>
-                                </div>
-                            </div>
-                            <div class="form-group" id="cabang_group" style="margin-top: -10px;">
-                                <div class="row">
-                                    <div class="col-md-4"><label class="control-label">Cabang</label></div>
-                                    <div class="col-md-8"><select id="cabang" name="cabang" data-placeholder="Select Cabang..." class="chosen_select form-control" tabindex="1" onchange=""></select></div>
                                 </div>
                             </div>
                         </div>
@@ -140,21 +134,19 @@
 <script type="text/javascript" src="<?=$base_url?>assets/helper/status.js"></script>
 <script type="text/javascript" src="<?=$base_url?>assets/helper/user_group.js"></script>
 <script type="text/javascript" src="<?=$base_url?>assets/helper/combobox.js"></script>
-<script type="text/javascript" src="<?=$base_url?>assets/helper/cabang.js"></script>
 
 <script>
     select_status('<?=$base_url?>', '#status');
     select_group('<?=$base_url?>','#user_group');
-    select_cabang('<?=$base_url?>','#cabang');
 
     var save_method;
     var table;
-    
-    
-    $(document).ready(function () {        
+
+
+    $(document).ready(function () {
         var level;
         var url;
-        
+
         table = $('#dt_default').DataTable({
             processing: true,
             serverSide: true,
@@ -164,15 +156,14 @@
                 url: "<?=$base_url?>setting/user/ajax_list",
                 async: false,
                 type: "POST",
-                data: function(user){
-                        user.level = status;
+                data: function(d){
+                    // No additional data needed
                 },
             },
             columns: [
               { title: "Name" },
               { title: "Username" },
               { title: "Group Name" },
-              { title: "Cabang" },
               { title: "Status" },
               { title: "Created User" },
               { title: "Created Date" },
@@ -193,7 +184,7 @@
             ],
         });
     });
-    
+
     function reload_table() {
         table.ajax.reload(null, false);
     }
@@ -202,23 +193,11 @@
         reload_table();
     });
 
-    function showHide() {
-        var level = $("#level").val();
-        if (level == 1) {
-            $('#cabang_group').show();
-        } else {
-            $('#cabang_group').hide();
-            $("#cabang").val('');
-            $("#cabang").trigger("chosen:updated");
-        }
-    }
-
     function tambah() {
         save_method = 'add';
         $('#form')[0].reset();
         $("#id_user").val('');
         $("#level").val("0");
-        showHide();
         document.getElementById("password").type = "password";
     }
 
@@ -229,19 +208,18 @@
         } else {
             url = "<?=$base_url?>setting/user/update";
         }
-        
+
         $.ajax({
             url: url,
             type: "POST",
             data: {
                 id_user: $("#id_user").val(),
-                name: $("#name").val(), 
+                name: $("#name").val(),
                 username: $("#username").val(),
                 password: $("#password").val(),
                 alamat: $("#alamat").val(),
                 telp: $("#telp").val(),
                 id_group: $("#user_group").val(),
-                cabang: $("#cabang").val(),
                 level: $("#level").val(),
                 status: $("#status").val(),
                 modified_date: '',
@@ -289,9 +267,7 @@
                 $("#telp").val(data.telp);
                 $("#user_group").val(data.id_group);
                 $("#level").val(data.level);
-                $("#cabang").val(data.cabang);
                 $("#status").val(data.status);
-                showHide();
                 $('#modal_form').modal('show');
                 $.unblockUI();
             },
@@ -306,7 +282,7 @@
         });
     }
 
-    
+
 
     function hapus(id) {
         var question = confirm("Are you sure ?");
@@ -340,7 +316,7 @@
     function clearFileInput(id) {
         $('#' + id).html($('#' + id).html());
     }
-    
+
     function showPass() {
         var x = document.getElementById("password");
         if (x.type === "password") {
@@ -350,7 +326,7 @@
         }
     }
 
-    
+
 
 </script>
 
