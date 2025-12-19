@@ -4,7 +4,7 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, viewport-fit=cover">
-    
+
     <!--CSS-->
     <link rel="icon" href="<?=$base_url?><?=$default['logo']?>">
     <!-- <link rel="stylesheet" href="<?=$base_url?>assets/vendor/bootstrap-4.1.3/scss/bootstrap.scss"> -->
@@ -16,10 +16,10 @@
     <link rel="stylesheet" href="<?=$base_url?>assets/vendor/bootstrap-tagsinput/tagsinput.css">
 
     <link rel="stylesheet" href="<?=$base_url?>assets/vendor/bootstrap-daterangepicker-master/daterangepicker.css">
-    
+
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=mosque" />
 
-    
+
     <style>
         .menu-text{
             font-size: small;
@@ -27,7 +27,7 @@
             color: white;
         }
     </style>
-    
+
 
     <!-- JavaScript -->
     <script src="<?=$base_url?>assets/js/jquery-3.2.1.min.js"></script>
@@ -43,9 +43,9 @@
     <script src="<?=$base_url?>assets/vendor/jquery-toast-plugin-master/dist/jquery.toast.min.js"></script>
     <script src="<?=$base_url?>assets/vendor/bootstrap-tagsinput/tagsinput.js"></script>
     <script src="<?=$base_url?>assets/js/moment.min.js"></script>
-    
+
     <!--CHART -->
-    
+
     <title><?=$default['titleTab']?></title>
 </head>
 
@@ -53,7 +53,7 @@
     <!-- page loader -->
     <div class="loader justify-content-center <?=$default['themeColor']?> text-white">
         <div class="align-self-center text-center">
-            <img src="<?=$base_url?>assets/img/loading_io.gif" alt="" style="width: 150px; border-radius:20px;" class="logo-icon">
+            <img src="<?=$base_url?>assets/img/loading.gif" alt="" style="width: 150px; border-radius:20px;" class="logo-icon">
             <h2 class="mt-3 font-weight-light"><?=$default['title']?></h2>
             <p class="mt-2 text-white">Awesome things getting ready...</p>
             <!-- <div class="logo-img-loader">
@@ -123,5 +123,5 @@
         </div>
         <!-- sidebar left ends -->
 
-        
+
         <div class="page-content" id="" style="margin-left: 50px;">
