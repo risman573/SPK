@@ -1,0 +1,4 @@
+# Requirements untuk Geocoding Python Script
+mysql-connector-python>=8.0.0
+requests>=2.28.0
+urllib3>=1.26.0

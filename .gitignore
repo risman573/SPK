@@ -1,0 +1,10 @@
+# Ignore runtime writable contents (logs, cache, sessions, uploads)
+# Keep the writable directory itself tracked by allowing a placeholder file
+writable/*
+!writable/.gitkeep
+!writable/.gitignore
+
+# Common project ignores
+.env
+vendor/
+node_modules/
