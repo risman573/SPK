@@ -61,7 +61,7 @@ SPK Pemilihan Laptop Terbaik adalah aplikasi web yang dirancang untuk membantu m
    Edit file `.env` dan sesuaikan konfigurasi database:
    ```
    database.default.hostname = localhost
-   database.default.database = spk_db
+   database.default.database = spk
    database.default.username = root
    database.default.password =
    ```
