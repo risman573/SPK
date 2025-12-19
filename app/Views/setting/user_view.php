@@ -331,4 +331,4 @@
 </script>
 
 
-<?=view('foother_view'); ?>
+<?=view('footer_view'); ?>

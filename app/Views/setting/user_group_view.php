@@ -37,7 +37,7 @@
                 <div class="col-auto">
                         <?php if ($tambah == "1") {?>
                         <button class="btn btn-rounded <?=$default['themeColor']?> text-white btn-icon text-uppercase pr-3" data-toggle="modal" data-target="#modal_form" onclick="tambah()">
-                            <i class="material-icons">add</i> 
+                            <i class="material-icons">add</i>
                             <span class="text-hide-xs">New</span>
                         </button>
                         <?php }?>
@@ -101,10 +101,10 @@
                                 <select id="status" name="status" data-placeholder="Choose a Country..." class="chosen_select form-control" tabindex="1"></select>
                             </div>
                        </div>
-                    </div>        
+                    </div>
                     </form>
 
-                        
+
                     <h3 class="heading_b uk-margin-bottom">List Menu</h3><hr>
                     <div style="height: 400px;overflow-x:auto;">
                         <form id="form_auth" name="form_auth" enctype="multipart/form-data">
@@ -120,7 +120,7 @@
                                 </thead>
                                 <tbody>
                                 </tbody>
-                            </table>  
+                            </table>
                         </form>
                     </div>
                 </div>
@@ -147,9 +147,9 @@
 
     var save_method;
     var table;
-    
-    
-    $(document).ready(function () {        
+
+
+    $(document).ready(function () {
         table = $('#dt_default').DataTable({
             processing: true,
             serverSide: true,
@@ -181,7 +181,7 @@
             ],
         });
     });
-    
+
 
     function reload_table() {
         table.ajax.reload(null, false);
@@ -202,20 +202,20 @@
     function simpan() {
         var url;
         var id_group;
-        
+
         if (save_method == 'add') {
             url = "<?=$base_url?>setting/user_group/add";
         } else {
             url = "<?=$base_url?>setting/user_group/update";
         }
-        
+
         $.ajax({
             url: url,
             type: "POST",
             //async : false,
             data: {
                 id_group: $("#id_group").val(),
-                group_name: $("#group_name").val(), 
+                group_name: $("#group_name").val(),
                 status: $("#status").val(),
                 modified_date: '',
                 modified_user: '',
@@ -249,9 +249,9 @@
             }
         });
     }
-    
+
     function simpan_auth(id_group){
-        //var url;       
+        //var url;
         //var data = new FormData($('form#form_auth')[0]);
         var data = $('form#form_auth').serialize();
         $.ajax({
@@ -350,15 +350,15 @@
     function clearFileInput(id) {
         $('#' + id).html($('#' + id).html());
     }
-	
+
     function setcek(id){
 		console.log(id);
         $('#text'+id).val(document.getElementById(id).checked == true ? 1 : 0);
     }
 
-    
+
 
 </script>
 
 
-<?=view('foother_view'); ?>
+<?=view('footer_view'); ?>

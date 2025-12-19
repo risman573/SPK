@@ -1,16 +1,16 @@
 <?php
 
 namespace App\Controllers\Setting;
- 
+
 use App\Controllers\MY_Controller;
 use App\Models\Menu_model;
- 
+
 class Menu extends MY_Controller {
 
     function __construct() {
         parent::__construct();
         $this->Menu_model = new Menu_model();
-        
+
         $this->model = $this->Menu_model;
         $this->table = "menu";
         $this->pkField = "id_menu";
@@ -25,17 +25,17 @@ class Menu extends MY_Controller {
             "url" => array("TIPE" => "STRING", "LABEL" => "URL"),
             "sort" => array("TIPE" => "INT", "LABEL" => "Sort"),
             "icon" => array("TIPE" => "ICON", "LABEL" => "Icon"),
-            "status_dok" => array("TIPE" => "STRING", "LABEL" => "Status"),
+            "status_name" => array("TIPE" => "STRING", "LABEL" => "Status"),
             "created" => array("TIPE" => "STRING", "LABEL" => "Created User"),
             "created_date" => array("TIPE" => "DATETIME", "LABEL" => "Created Date"),
             "modified" => array("TIPE" => "STRING", "LABEL" => "Modified User"),
             "modified_date" => array("TIPE" => "DATETIME", "LABEL" => "Modified Date"),
             "action" => array("TIPE" => "TRANSACTION", "LABEL" => "Action"),
         );
-        
+
         //$this->model->fieldsView = $this->fields;
     }
-    
+
     public function index() {
         if (!$this->session->get('website_admin_logged_in')) {
             return redirect()->to(base_url().'login');
@@ -43,10 +43,10 @@ class Menu extends MY_Controller {
         if($this->lihat!=1){
             return view('noaccess_view', $this->data);
         }else{
-            return view('setting/menu_view', $this->data); 
+            return view('setting/menu_view', $this->data);
         }
     }
-    
+
     public function dataInput() {
         // $this->load->library('form_validation');
         // $this->form_validation->set_error_delimiters('', '');
@@ -55,7 +55,7 @@ class Menu extends MY_Controller {
         $this->form_validation->setRule('type', 'Menu Type', 'required');
         $this->form_validation->setRule('url', 'URL', 'required|min_length[1]|max_length[255]');
         $this->form_validation->setRule('status', 'Status', 'required');
-        
+
 
         if ($this->form_validation->withRequest($this->request)->run() == FALSE) {
             return array("valid" => FALSE, "error" =>  $this->form_validation->listErrors());
@@ -63,7 +63,7 @@ class Menu extends MY_Controller {
             $data = array();
             foreach ($this->request->getPost() as $key => $value) {
                 if ($key == "method") {
-                    
+
                 } elseif ($key == $this->pkField) {
 //                    $data[$key] = !$value ? $this->uuid->v4() : $value;
                     $this->pkFieldValue = !$value ? $this->uuid->v4() : $value;

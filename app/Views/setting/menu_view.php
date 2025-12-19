@@ -12,7 +12,7 @@
                 <div class="col-auto">
                         <?php if ($tambah == "1") {?>
                         <button class="btn btn-rounded <?=$default['themeColor']?> text-white btn-icon text-uppercase pr-3" data-toggle="modal" data-target="#modal_form" onclick="tambah()">
-                            <i class="material-icons">add</i> 
+                            <i class="material-icons">add</i>
                             <span class="text-hide-xs">New</span>
                         </button>
                         <?php }?>
@@ -154,9 +154,9 @@
 
     var save_method;
     var table;
-    
-    
-    $(document).ready(function () {        
+
+
+    $(document).ready(function () {
         table = $('#dt_default').DataTable({
             processing: true,
             serverSide: true,
@@ -192,7 +192,7 @@
             ],
         });
     });
-    
+
     function showHide(){
         var item = $("#type").val();
         if(item == 0 || item == ''){
@@ -202,7 +202,7 @@
             $('#parentHide').css("display","block");
         }
     }
-    
+
     function reload_table() {
         table.ajax.reload(null, false);
     }
@@ -225,13 +225,13 @@
         } else {
             url = "<?=$base_url?>setting/menu/update";
         }
-        
+
         $.ajax({
             url: url,
             type: "POST",
             data: {
                 id_menu: $("#id_menu").val(),
-                menu_name: $("#menu_name").val(), 
+                menu_name: $("#menu_name").val(),
                 parent: $("#parent").val(),
                 url: $("#url").val(),
                 type: $("#type").val(),
@@ -299,7 +299,7 @@
         });
     }
 
-    
+
 
     function hapus(id) {
         var question = confirm("Are you sure ?");
@@ -334,9 +334,9 @@
         $('#' + id).html($('#' + id).html());
     }
 
-    
+
 
 </script>
 
 
-<?=view('foother_view'); ?>
+<?=view('footer_view'); ?>

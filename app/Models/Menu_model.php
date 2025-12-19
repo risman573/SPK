@@ -16,7 +16,7 @@ class Menu_model extends MY_Model {
             "menu.url",
             "menu.sort",
             "menu.status",
-            "status.nama AS status_dok",
+            "status.nama AS status_name",
             "menu.type",
             "menu.icon",
             "menu.modified_date",
@@ -36,7 +36,7 @@ class Menu_model extends MY_Model {
             "user AS user2"=>"user2.id_user=menu.modified_user"
         );
         $this->joins = array("left", "left", "left", "left");
-        
+
     }
 
 }

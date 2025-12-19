@@ -21,7 +21,7 @@ class User_model extends MY_Model {
             "user.parent",
             "user.menu",
             "user.photo",
-            "status.nama AS status_dok",
+            "status.nama AS status_name",
             "user.created_date",
             "user.created_user",
             "user.modified_date",

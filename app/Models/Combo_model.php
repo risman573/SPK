@@ -10,13 +10,13 @@ class Combo_model extends MY_Model {
         parent::__construct();
         $this->table = "combo";
         $this->primaryKey = "combo.id";
-        $this->fields = array(            
+        $this->fields = array(
             "combo.kode",
             "combo.nama",
             "combo.type",
             "combo.flag",
             "combo.sort",
-            "status.nama AS status_dok",
+            "status.nama AS status_name",
             "combo.status",
             "combo.created_date",
             "combo.created_user",
@@ -37,11 +37,11 @@ class Combo_model extends MY_Model {
             "left",
         );
     }
-    
+
     function getCombo($type, $flag){
         $sql = "select * from combo where type='". $type ."' and flag='". $flag ."' and status<9 ORDER BY sort ASC";
         $query = $this->db->query($sql);
         return $query->getResult('array');
     }
-    
+
 }

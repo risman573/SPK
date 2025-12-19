@@ -21,7 +21,7 @@ SPK Pemilihan Laptop Terbaik adalah aplikasi web yang dirancang untuk membantu m
 - ✅ **Dashboard Interaktif** - Tampilan data kriteria, alternatif, dan hasil penilaian
 - ✅ **5 Kriteria Penilaian** - Processor, RAM, Storage, Battery, dan Harga
 - ✅ **5 Laptop Alternatif** - MacBook Pro, Dell XPS, ASUS ROG, HP Pavilion, Lenovo ThinkPad
-- ✅ **Perhitungan SAW Otomatis** - Normalisasi dan pembobotan nilai
+- ✅ **Perhitungan SAW Otomatis** - Perhitungan dan pembobotan nilai
 - ✅ **Visualisasi Ranking** - Tampilan skor dan progress bar
 - ✅ **UI Modern** - Responsive design dengan gradient dan animasi
 

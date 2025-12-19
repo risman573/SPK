@@ -13,7 +13,7 @@ class User_group_model extends MY_Model {
         $this->fields = array(
             "user_group.group_name",
             "user_group.status",
-            "status.nama AS status_dok",
+            "status.nama AS status_name",
             "user_group.created_date",
             "user_group.created_user",
             "user_group.modified_date",
@@ -32,9 +32,9 @@ class User_group_model extends MY_Model {
             "left",
             "left",
         );
-        
+
     }
-    
+
     function getGrup(){
         $unit = '';
         $sql="select * from user_group where id_group<>'f6f1a7c7-4868-4383-9ec5-35c9603d' and status<9 ORDER BY group_name ASC";

@@ -12,7 +12,7 @@
                 <div class="col-auto">
                         <?php if ($tambah == "1") {?>
                         <button class="btn btn-rounded <?=$default['themeColor']?> text-uppercase text-white pr-3" data-toggle="modal" data-target="#modal_form" onclick="tambah()">
-                            <i class="material-icons">add</i> 
+                            <i class="material-icons">add</i>
                             <span class="text-hide-xs">New</span>
                         </button>
                         <?php }?>
@@ -41,10 +41,10 @@
         </div>
     </div>
 </div>
-                        
-                        
-                        
-        
+
+
+
+
 
 <div class="modal fade" id="modal_form" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -119,8 +119,8 @@
     var save_method;
     var table;
     var foto = 'no_photo.png';
-    
-    $(document).ready(function () {        
+
+    $(document).ready(function () {
         table = $('#dt_default').DataTable({
             processing: true,
             serverSide: true,
@@ -151,7 +151,7 @@
             ],
         });
     });
-    
+
     function reload_table() {
         table.ajax.reload(null, false);
     }
@@ -169,7 +169,7 @@
 //        foto = 'no_photo.png';
 //        $('#foto_img').attr('src', '<?=$base_url?>files/image/user/no_photo.png');
     }
-    
+
 
     function simpan() {
         var url;
@@ -178,15 +178,15 @@
         } else {
             url = "<?=$base_url?>setting/defaults/update";
         }
-        
+
         $.ajax({
             url: url,
             type: "POST",
             data: {
                 id: $("#id").val(),
-                key: $("#key").val(), 
-                value: $("#value").val(), 
-                description: $("#description").val(), 
+                key: $("#key").val(),
+                value: $("#value").val(),
+                description: $("#description").val(),
                 status: '1',
                 method: save_method
             },
@@ -275,7 +275,7 @@
 //    function clearFileInput(id) {
 //        $('#' + id).html($('#' + id).html());
 //    }
-//	
+//
 //    function hapusGambar(gambar) {
 //        $success = false;
 //        if (gambar !== 'no_image.png') {
@@ -298,7 +298,7 @@
 //        }
 //        return $success;
 //    }
-//    
+//
 //    function PreviewImage(input,id) {
 //        if (input.files && input.files[0]) {
 //            var reader = new FileReader();
@@ -311,9 +311,9 @@
 //        }
 //    }
 
-    
+
 
 </script>
 
 
-<?=view('foother_view'); ?>
+<?=view('footer_view'); ?>

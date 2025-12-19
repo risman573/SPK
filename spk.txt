@@ -1,0 +1,117 @@
+berarti cukup dengan struktur ini?
+-- =========================================================
+--  MIGRASI TABEL SPK PEMILIHAN LAPTOP (METODE SAW)
+--  ID       : UUID (VARCHAR(36))
+--  AUDIT    : status, created_user, created_date, modified_user, modified_date
+-- =========================================================
+
+SET FOREIGN_KEY_CHECKS = 0;
+
+-- =========================================================
+--  DROP TABLE (URUTAN AMAN)
+-- =========================================================
+DROP TABLE IF EXISTS hasil;
+DROP TABLE IF EXISTS normalisasi;
+DROP TABLE IF EXISTS nilai;
+DROP TABLE IF EXISTS alternatif;
+DROP TABLE IF EXISTS kriteria;
+
+-- =========================================================
+--  TABEL KRITERIA
+-- =========================================================
+CREATE TABLE kriteria (
+    id_kriteria VARCHAR(36) PRIMARY KEY,
+    nama_kriteria VARCHAR(100) NOT NULL,
+    bobot DOUBLE NOT NULL,
+    atribut ENUM('benefit','cost') NOT NULL,
+
+    status INT(1) NOT NULL DEFAULT 1,
+    created_user VARCHAR(255),
+    created_date DATETIME NOT NULL,
+    modified_user VARCHAR(255),
+    modified_date DATETIME(6)
+) ENGINE=InnoDB;
+
+-- =========================================================
+--  TABEL ALTERNATIF
+-- =========================================================
+CREATE TABLE alternatif (
+    id_alternatif VARCHAR(36) PRIMARY KEY,
+    nama_alternatif VARCHAR(150) NOT NULL,
+
+    status INT(1) NOT NULL DEFAULT 1,
+    created_user VARCHAR(255),
+    created_date DATETIME NOT NULL,
+    modified_user VARCHAR(255),
+    modified_date DATETIME(6)
+) ENGINE=InnoDB;
+
+-- =========================================================
+--  TABEL NILAI (MATRiKS KEPUTUSAN)
+-- =========================================================
+CREATE TABLE nilai (
+    id_nilai VARCHAR(36) PRIMARY KEY,
+    id_alternatif VARCHAR(36) NOT NULL,
+    id_kriteria VARCHAR(36) NOT NULL,
+    nilai DOUBLE NOT NULL,
+
+    status INT(1) NOT NULL DEFAULT 1,
+    created_user VARCHAR(255),
+    created_date DATETIME NOT NULL,
+    modified_user VARCHAR(255),
+    modified_date DATETIME(6),
+
+    CONSTRAINT fk_nilai_alternatif
+        FOREIGN KEY (id_alternatif)
+        REFERENCES alternatif(id_alternatif),
+
+    CONSTRAINT fk_nilai_kriteria
+        FOREIGN KEY (id_kriteria)
+        REFERENCES kriteria(id_kriteria)
+) ENGINE=InnoDB;
+
+-- =========================================================
+--  TABEL NORMALISASI
+-- =========================================================
+CREATE TABLE normalisasi (
+    id_normalisasi VARCHAR(36) PRIMARY KEY,
+    id_alternatif VARCHAR(36) NOT NULL,
+    id_kriteria VARCHAR(36) NOT NULL,
+    nilai_normalisasi DOUBLE NOT NULL,
+
+    status INT(1) NOT NULL DEFAULT 1,
+    created_user VARCHAR(255),
+    created_date DATETIME NOT NULL,
+    modified_user VARCHAR(255),
+    modified_date DATETIME(6),
+
+    CONSTRAINT fk_normalisasi_alternatif
+        FOREIGN KEY (id_alternatif)
+        REFERENCES alternatif(id_alternatif),
+
+    CONSTRAINT fk_normalisasi_kriteria
+        FOREIGN KEY (id_kriteria)
+        REFERENCES kriteria(id_kriteria)
+) ENGINE=InnoDB;
+
+-- =========================================================
+--  TABEL HASIL (PREFERENSI & RANKING)
+-- =========================================================
+CREATE TABLE hasil (
+    id_hasil VARCHAR(36) PRIMARY KEY,
+    id_alternatif VARCHAR(36) NOT NULL,
+    nilai_preferensi DOUBLE NOT NULL,
+    ranking INT,
+
+    status INT(1) NOT NULL DEFAULT 1,
+    created_user VARCHAR(255),
+    created_date DATETIME NOT NULL,
+    modified_user VARCHAR(255),
+    modified_date DATETIME(6),
+
+    CONSTRAINT fk_hasil_alternatif
+        FOREIGN KEY (id_alternatif)
+        REFERENCES alternatif(id_alternatif)
+) ENGINE=InnoDB;
+
+SET FOREIGN_KEY_CHECKS = 1;

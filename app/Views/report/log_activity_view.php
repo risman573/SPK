@@ -39,10 +39,10 @@
         </div>
     </div>
 </div>
-                        
-                        
-                        
-        
+
+
+
+
 
 
 
@@ -51,9 +51,9 @@
     var save_method;
     var table;
     var foto = 'no_photo.png';
-    
-    
-    $(document).ready(function () {        
+
+
+    $(document).ready(function () {
         table = $('#dt_default').DataTable({
             processing: true,
             serverSide: true,
@@ -73,7 +73,7 @@
             order: [[ 0, "desc" ]]
         });
     });
-    
+
     function reload_table() {
         table.ajax.reload(null, false);
     }
@@ -84,4 +84,4 @@
 
 
 
-<? $this->load->view('foother_view'); ?>
+<? $this->load->view('footer_view'); ?>

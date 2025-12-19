@@ -23,7 +23,7 @@ class User extends MY_Controller {
             "name" => array("TIPE" => "STRING", "LABEL" => "Name"),
             "username" => array("TIPE" => "STRING", "LABEL" => "Username"),
             "group_name" => array("TIPE" => "STRING", "LABEL" => "Group Name"),
-            "status_dok" => array("TIPE" => "STRING", "LABEL" => "Status"),
+            "status_name" => array("TIPE" => "STRING", "LABEL" => "Status"),
             "created" => array("TIPE" => "STRING", "LABEL" => "Created User"),
             "created_date" => array("TIPE" => "DATETIME", "LABEL" => "Created Date"),
             "modified" => array("TIPE" => "STRING", "LABEL" => "Modified User"),
