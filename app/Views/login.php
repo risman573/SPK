@@ -12,8 +12,8 @@
     <link rel="stylesheet" href="<?=$base_url?>assets/vendor/swiper/css/swiper.min.css">
     <link id="theme" rel="stylesheet" href="<?=$base_url?>assets/css/purplesidebar.css" type="text/css">
 
-
-
+    
+    
     <title><?=$default['titleTab']?></title>
 </head>
 
