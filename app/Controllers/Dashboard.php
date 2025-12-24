@@ -4,13 +4,11 @@ namespace App\Controllers;
 
 use App\Controllers\MY_Controller;
 use App\Models\Dashboard_model;
-use App\Models\Data_full_model;
 
 class Dashboard extends MY_Controller {
 
     function __construct() {
         parent::__construct();
-        
         $this->Dashboard_model = new Dashboard_model();
     }
 
@@ -20,32 +18,55 @@ class Dashboard extends MY_Controller {
         }
         return view('dashboard_view', $this->data);
     }
-    
+
     function data(){
-        // $this->db = $this->load->database('iowork',TRUE);
-        // $this->load->model('Data_full_model');
-        $this->Data_full_model = new Data_full_model();
-        // $this->load->model('M_pekerja_model');
-        // $this->load->model('T_tugas_pekerja_model');
+        // Disable CodeIgniter's output
+        $this->response->setContentType('application/json');
 
-        $dsum = $this->Data_full_model->getDashboardSummary();
-        $dbar = $this->Data_full_model->getDashboardBar();
-        $dpie = $this->Data_full_model->getDashboardPie();
+        try {
+            $db = \Config\Database::connect();
 
-        $dataPie = [
-            ['category'=>'Konsultan','value'=>$dpie->Konsultan],
-            ['category'=>'Fellowship','value'=>$dpie->Fellowship],
-        ];
-        echo json_encode(
-            array(
-                'cabang'=> $dsum->total_cabang,
-                'anggota'=> $dsum->total_anggota,
-                'konsultan'=> $dsum->konsultan_fellowship,
-                'rs'=> $dsum->rs_tht,
-                'bar'=> $dbar,
-                'pie'=> $dataPie,
-            )
-        );
+            // Get summary statistics
+            $stat_alternatif = $db->table('alternatif')
+                ->where('status', 1)
+                ->countAllResults();
+
+            $stat_kriteria = $db->table('kriteria')
+                ->where('status', 1)
+                ->countAllResults();
+
+            $stat_nilai = $db->table('nilai')
+                ->where('status', 1)
+                ->countAllResults();
+
+            $stat_normalisasi = $db->table('normalisasi')
+                ->where('status', 1)
+                ->countAllResults();
+
+            $result = [
+                'stat_alternatif' => $stat_alternatif,
+                'stat_kriteria' => $stat_kriteria,
+                'stat_nilai' => $stat_nilai,
+                'stat_normalisasi' => $stat_normalisasi,
+            ];
+
+            // Clean output and return JSON
+            ob_end_clean();
+            ob_start();
+            echo json_encode($result);
+            $output = ob_get_clean();
+
+            return $this->response
+                ->setStatusCode(200)
+                ->setBody($output);
+
+        } catch (\Exception $e) {
+            return $this->response
+                ->setStatusCode(500)
+                ->setJSON([
+                    'error' => $e->getMessage()
+                ]);
+        }
     }
-    
+
 }
