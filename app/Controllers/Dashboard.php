@@ -43,11 +43,23 @@ class Dashboard extends MY_Controller {
                 ->where('status', 1)
                 ->countAllResults();
 
+            // Get top 10 rankings from hasil table
+            $rankings = $db->table('hasil as h')
+                ->select('h.ranking, h.nilai_preferensi, a.nama_alternatif, a.id_alternatif')
+                ->join('alternatif as a', 'a.id_alternatif = h.id_alternatif', 'left')
+                ->where('h.status', 1)
+                ->where('a.status', 1)
+                ->orderBy('h.nilai_preferensi', 'DESC')
+                ->limit(10)
+                ->get()
+                ->getResult();
+
             $result = [
                 'stat_alternatif' => $stat_alternatif,
                 'stat_kriteria' => $stat_kriteria,
                 'stat_nilai' => $stat_nilai,
                 'stat_normalisasi' => $stat_normalisasi,
+                'rankings' => $rankings
             ];
 
             // Clean output and return JSON
